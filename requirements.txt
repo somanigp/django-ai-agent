@@ -4,3 +4,4 @@ langchain-openai
 langgraph
 permit
 python-decouple
+psycopg2-binary
