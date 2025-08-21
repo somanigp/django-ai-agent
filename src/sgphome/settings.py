@@ -32,11 +32,12 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
-    'django.contrib.auth',
+    'django.contrib.auth',  # Auth User Model -> settings.AUTH_USER_MODEL, used as default.
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'documents', # My app
 ]
 
 MIDDLEWARE = [
@@ -74,7 +75,7 @@ WSGI_APPLICATION = 'sgphome.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
+        'ENGINE': 'django.db.backends.sqlite3',  # Local SQLite DB.
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
