@@ -20,7 +20,7 @@ class Document(models.Model):  # app name -> documents, model name -> Document (
     updated_at = models.DateTimeField(auto_now=True) # Auto update on every save.
     
     def __str__(self) -> str:
-        return f"Document: {self.title}"
+        return f"{self.title}"
     
     def save(self, *args, **kwargs):
         # Because active_at in this logic does NOT mean “last time active”.
