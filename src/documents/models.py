@@ -10,6 +10,7 @@ User = settings.AUTH_USER_MODEL  # -> str "auth.User"
 class Document(models.Model):  # app name -> documents, model name -> Document ( add one document at a time )
     # owner will take input of User class obj
     owner = models.ForeignKey(User, on_delete=models.CASCADE)  # Can use SET_NULL, CASCADE, PROTECT, DO_NOTHING, etc.
+    # owner_id will take input of User class obj. owner_id = user.id
     title = models.CharField(max_length=300, default='Untitled')
     content = models.TextField(blank=True, null=True)
     active = models.BooleanField(default=True)
