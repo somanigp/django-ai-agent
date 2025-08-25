@@ -23,8 +23,10 @@ def get_openai_model(model="gpt-4o-mini"):  # "gpt-4o-mini" will be default, if 
         # other params...
     )
     
-def get_google_model(model="gemini-2.5-flash"):  # gemini-2.0-flash-lite
+def get_google_model(model="gemini-2.0-flash-lite"):  # gemini-2.0-flash-lite gemini-2.5-flash
     # Initialize the Gemini model with the specified parameters
+    if model is None:
+        model = "gemini-2.0-flash-lite"
     return ChatGoogleGenerativeAI(
         model=model,
         temperature=0.0,

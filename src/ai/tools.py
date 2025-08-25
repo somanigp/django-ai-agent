@@ -4,16 +4,20 @@ from langchain_core.runnables import RunnableConfig  # To pass extra config to t
 
 @tool
 def list_documents(config: RunnableConfig):
-    """List all active documents for a User."""
-    print(config) # {'tags': [], 'metadata': {'user_id': 4}, 'callbacks': None, 'recursion_limit': 25, 'configurable': {'user_id': 4}}
-    user_id = config.get("configurable").get("user_id")  # Get the user_id from the metadata.
+    """List the most recent 5 active documents for the current user."""
+    # print(config) # {'tags': [], 'metadata': {'user_id': 4}, 'callbacks': None, 'recursion_limit': 25, 'configurable': {'user_id': 4}}
+    
+    limit = 5
+    user_id = config.get("configurable") or config.get("metadata")
+    user_id = user_id.get("user_id")  # Get the user_id from the metadata.
     if not user_id:
         raise Exception("User ID not found.")
-    qs = Document.objects.filter(owner_id=user_id, active=True) # We don't need User object. Owner is a foreign key so only owner_id will do.
+    qs = Document.objects.filter(owner_id=user_id, active=True).order_by("-created_at")  # We don't need User object. Owner is a foreign key so only owner_id will do.
+    # -created_at is reverse of created_at.
     response_data = []
     # Serialize the queryset, meaning convert it to a list of dictionaries.
     # Can also use the Django Rest Framework serializers, Django Ninja, model_to_dict, pydantic to turn data to dict.
-    for doc in qs:
+    for doc in qs[:limit]:
         response_data.append({
             "id": doc.id,
             "title": doc.title,
@@ -25,7 +29,8 @@ def list_documents(config: RunnableConfig):
 def get_document(document_id: int, config: RunnableConfig):  # Parameters will take arguments as dictionary. 
     # put RunnableConfig after the arguments you need for the function.
     """Get a specific document by ID for a User."""
-    user_id = config.get("configurable").get("user_id")
+    user_id = config.get("configurable") or config.get("metadata")
+    user_id = user_id.get("user_id")  # Get the user_id from the metadata.
     if not user_id:
         raise Exception("User ID not found.")
     try:
@@ -41,3 +46,10 @@ def get_document(document_id: int, config: RunnableConfig):  # Parameters will t
         # return None
     except Exception as e:
         raise Exception(f"An error occurred : {e}, while retrieving the document.")
+    
+
+
+document_tools = [
+    list_documents,  # Make sure both have a short doc string explaining the function.
+    get_document,
+]
