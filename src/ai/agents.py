@@ -3,14 +3,18 @@ from ai.llms import get_google_model
 from ai.tools import (  # Use () for readability
     document_tools
 )
+from ai.websearch_tool import get_web_search_tool
 
 def get_document_agent(model=None, checkpointer=None):
     llm_model = get_google_model(model=model)
     
+    # Combine document tools with the web search tool
+    all_tools = document_tools + [get_web_search_tool()]
+
     agent = create_react_agent(
         model=llm_model,
-        tools=document_tools,
-        prompt="You are a helpful assistant in managing a User's documents within this app", # prompt is a system instruction given to the LLM. It defines how the AI should behave and sets the context for the agent. Its here not the user prompt.The LLM will answer as an assistant specifically focused on document management.
+        tools=all_tools,
+        prompt="You are a helpful assistant in managing a User's documents within this app.", # prompt is a system instruction given to the LLM. It defines how the AI should behave and sets the context for the agent. Its here not the user prompt.The LLM will answer as an assistant specifically focused on document management.
         checkpointer=checkpointer  # To allow multi-turn conversations with an agent, you need to enable persistence by providing a checkpointer when creating an agent. At runtime, you need to provide a config containing thread_id — a unique identifier for the conversation (session). When you enable the checkpointer, it stores agent state at every step in the provided checkpointer database. when the agent is invoked the second time with the same thread_id, the original message history from the first conversation is automatically included, together with the new user input.
     )
     return agent

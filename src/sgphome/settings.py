@@ -139,3 +139,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 OPENAI_API_KEY = config("OPENAI_API_KEY", default=None)
 GOOGLE_API_KEY = config("GOOGLE_API_KEY", default=None)
+TAVILY_API_KEY = config("TAVILY_API_KEY", default=None)

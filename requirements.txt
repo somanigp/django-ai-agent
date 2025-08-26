@@ -6,3 +6,7 @@ langgraph
 permit
 python-decouple
 psycopg2-binary
+tavily-python 
+langchain 
+langchain-community
+langchain-tavily
